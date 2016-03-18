@@ -22,12 +22,11 @@ Customer(name, email, password)
 ShoppingCart(customerEmail)
 	ShoppingCartItem(variantId, quantity)
 
-Order(status, date, customerId, copyOfShippingAddress, copyOfBillingAddress)
-	OrderPackage(copyOfShippingRate)
-		OrderPackageItem(
-			producId, productName,
-			variantId, variantName, variantWeight, variantSKU,
-			quantity, basePrice, promoPrice, copyOfVatRate
-		)
+Order(status, date, customerId, copyOfShippingAddress, copyOfBillingAddress, copyOfShippingRate)
+	OrderItem(
+		producId, productName,
+		variantId, variantName, variantWeight, variantSKU, variantBasePrice, variantPromoPrice,
+		quantity, copyOfVatRate
+	)
 
 checkout(shoppingCart) order
