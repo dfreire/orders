@@ -1,29 +1,30 @@
 Product(name)
-	Variant(name, weight, availableQuantity, sku, minOrderQuantity, minOrderQuantityIncrement, vatRates)
+	Variant(name, weight, compatiblePackages, sku, availableQuantity, vatRates)
 		BasePrice(value, shippingRegions)
 		PromoPrice(value, shippingRegions)
 
-ShippingRegion(name)
-	ShippingRateFlat(flatValue)
-	ShippingRateByWeight(fromWeight, toWeight, value)
-	ShippingRateByQuantity(fromQuantity, toQuantity, value)
-	ShippingRateByTotalPrice(fromTotalPrice, toTotalPrice, value)
-
 VatRate(name, value, shippingRegions)
+
+Country(name)
+	ShippingRegion(name)
+
+ShippingRate(stragety[ lowest | highest ], flatValue, shippingRegions)
+	ByWeight(fromWeight, toWeight, value)
+	ByTotalPrice(fromTotalPrice, toTotalPrice, value)
 
 Customer(name, email, password)
 	Address(
-		fullName, streetLine1, streetLine2, streetLine3, postCode, townOrCity, country
+		fullName, streetLine1, streetLine2, streetLine3, postalCode, townOrCity, country
 		isBillingAddress, isDefaultBillingAddress, vatNumber, companyName,
-		isBillingAddress, isDefaultShippingAddress, shippingRegion, phoneNumber
+		isShippingAddress, isDefaultShippingAddress, shippingRegion, phoneNumber
 	)
 
 ShoppingCart(customerEmail)
 	ShoppingCartItem(variantId, quantity)
 
 Order(status, date, customerId, copyOfShippingAddress, copyOfBillingAddress)
-	ShippingGroup(copyOfShippingRate)
-		ShippingGroupItem(
+	OrderPackage(copyOfShippingRate)
+		OrderPackageItem(
 			producId, productName,
 			variantId, variantName, variantWeight, variantSKU,
 			quantity, basePrice, promoPrice, copyOfVatRate
