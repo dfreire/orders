@@ -1,14 +1,21 @@
 Product(name)
-	Variant(name, weight, compatiblePackages, sku, availableQuantity, vatRates)
-		BasePrice(value, shippingRegions)
-		PromoPrice(value, shippingRegions)
+	Variant(name, accountingCode, vatRates, availableQuantity, weight, compatiblePackages)
+		BasePrice(value, shippingRegions, isDiscountByQuantityEnabled, isInPromotion, regularPrice)
+			DiscountByQuantity(fromQuantity, toQuantity, discountPercent)
+
+Pack(name, variants, accountingCode, vatRates, useVariantsCompatiblePackages, additionalWeight)
+	BasePrice(value, shippingRegions, isDiscountByQuantityEnabled, isInPromotion, regularPrice)
+		DiscountByQuantity(fromQuantity, toQuantity, discountPercent)
+
+Package(name, accountingCode, vatRates, weight, capacity)
+	AddicionalPrice(value, shippingRegions)
 
 VatRate(name, value, shippingRegions)
 
 Country(name)
 	ShippingRegion(name)
 
-ShippingRate(stragety[ lowest | highest ], flatValue, shippingRegions)
+ShippingRate(name, stragety[ lowest | highest ], flatValue, shippingRegions)
 	ByWeight(fromWeight, toWeight, value)
 	ByTotalPrice(fromTotalPrice, toTotalPrice, value)
 
@@ -19,13 +26,13 @@ Customer(name, email, password)
 		isShippingAddress, isDefaultShippingAddress, shippingRegion, phoneNumber
 	)
 
-ShoppingCart(customerEmail)
+ShoppingCart(customerId)
 	ShoppingCartItem(variantId, quantity)
 
 Order(status, date, customerId, copyOfShippingAddress, copyOfBillingAddress, copyOfShippingRate)
 	OrderItem(
 		producId, productName,
-		variantId, variantName, variantWeight, variantSKU, variantBasePrice, variantPromoPrice,
+		variantId, variantName, variantWeight, variantaccountingCode, variantBasePrice, variantPromoPrice,
 		quantity, copyOfVatRate
 	)
 
