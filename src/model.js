@@ -1,20 +1,20 @@
 var products = [
     { id: "redoma-2013-075", accountingCode: "001", vatRateIds: ["pt-iva-23"], prices: [
-            { absoluteValue: 35, shippingRegionIds: ["pt-all"] }
+            { absoluteValue: 35, vatRegionIds: ["pt"] }
         ] },
     { id: "charme-2010-075", accountingCode: "001", vatRateIds: ["pt-iva-23"], prices: [
-            { absoluteValue: 55, shippingRegionIds: ["pt-all"] }
+            { absoluteValue: 55, vatRegionIds: ["pt"] }
         ] }
 ];
+var vatRegions = [
+    { id: "pt", name: "Portugal", countryId: "pt" }
+];
 var vatRates = [
-    { id: "pt-iva-13", percentValue: 0.13, shippingRegionIds: ["pt-all"] },
-    { id: "pt-iva-23", percentValue: 0.23, shippingRegionIds: ["pt-all"] }
+    { id: "pt-iva-13", percentValue: 0.13, vatRegionId: "pt" },
+    { id: "pt-iva-23", percentValue: 0.23, vatRegionId: "pt" }
 ];
 var shippingRegions = [
     { id: "pt-all", name: "Portugal Continental", countryId: "pt" }
-];
-var countries = [
-    { id: "pt", name: "Portugal" }
 ];
 var ShippingRateStrategy;
 (function (ShippingRateStrategy) {
@@ -41,7 +41,7 @@ var customer = {
     email: "dario.freire@gmail.com",
     addresses: [{
             fullName: "Dário Freire", streetLine1: "Rua do Não Digo", postalCode: "1234", townOrCity: "Porto", countryId: "PT",
-            billingRegionId: "pt-all", vatNumber: "111 111 111", companyName: "CodingSkills", isDefaultBillingAddress: true,
+            vatRegionId: "pt", vatNumber: "111 111 111", companyName: "CodingSkills", isDefaultBillingAddress: true,
             shippingRegionId: "pt-all", phoneNumber: "111 111 111", isDefaultShippingAddress: true
         }]
 };
@@ -66,7 +66,7 @@ function getVatRateFor(billingAddress, sellableItem) {
         var vatRateId = sellableItem.vatRateIds[i];
         for (var j = 0; j < vatRates.length; j++) {
             var vatRate = vatRates[j];
-            if (vatRateId === vatRate.id && vatRate.shippingRegionIds.indexOf(billingAddress.billingRegionId) >= 0) {
+            if (vatRateId === vatRate.id && vatRate.vatRegionId === billingAddress.vatRegionId) {
                 return vatRate;
             }
         }
