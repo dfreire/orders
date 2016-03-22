@@ -41,8 +41,8 @@ var customer = {
     email: "dario.freire@gmail.com",
     addresses: [{
             fullName: "Dário Freire", streetLine1: "Rua do Não Digo", postalCode: "1234", townOrCity: "Porto", countryId: "PT",
-            vatNumber: "111 111 111", companyName: "CodingSkills", isDefaultBillingAddress: true,
-            shippingRegionId: "PT", phoneNumber: "111 111 111", isDefaultShippingAddress: true
+            billingRegionId: "pt-all", vatNumber: "111 111 111", companyName: "CodingSkills", isDefaultBillingAddress: true,
+            shippingRegionId: "pt-all", phoneNumber: "111 111 111", isDefaultShippingAddress: true
         }]
 };
 var shoppingCart = { items: [] };
@@ -52,10 +52,8 @@ function deepCopy(obj) {
 function addToShoppingCart(sellableItemId, quantity) {
     shoppingCart.items.push({ sellableItemId: sellableItemId, quantity: quantity });
 }
-addToShoppingCart("redoma-2013-075", 1);
-addToShoppingCart("charme-2010-075", 2);
 function getShippingRateFor(shippingAddress) {
-    for (var i = 0; i <= shippingRates.length; i++) {
+    for (var i = 0; i < shippingRates.length; i++) {
         var shippingRate = shippingRates[i];
         if (shippingRate.shippingRegionIds.indexOf(shippingAddress.shippingRegionId) >= 0) {
             return shippingRate;
@@ -64,11 +62,11 @@ function getShippingRateFor(shippingAddress) {
     throw "no shipping rate for given address";
 }
 function getVatRateFor(billingAddress, sellableItem) {
-    for (var i = 0; i <= sellableItem.vatRateIds.length; i++) {
+    for (var i = 0; i < sellableItem.vatRateIds.length; i++) {
         var vatRateId = sellableItem.vatRateIds[i];
-        for (var j = 0; j <= vatRates.length; j++) {
+        for (var j = 0; j < vatRates.length; j++) {
             var vatRate = vatRates[j];
-            if (vatRate.shippingRegionIds.indexOf(billingAddress.shippingRegionId) >= 0) {
+            if (vatRateId === vatRate.id && vatRate.shippingRegionIds.indexOf(billingAddress.billingRegionId) >= 0) {
                 return vatRate;
             }
         }
@@ -76,14 +74,13 @@ function getVatRateFor(billingAddress, sellableItem) {
     return null;
 }
 function findSellableItem(id) {
-    for (var i = 0; i <= products.length; i++) {
+    for (var i = 0; i < products.length; i++) {
         if (products[i].id === id) {
             return products[i];
         }
     }
 }
 function checkout(shippingAddress, billingAddress) {
-    var items = [];
     var order = {
         status: OrderStatus.PendingPayment,
         date: new Date(),
@@ -91,9 +88,9 @@ function checkout(shippingAddress, billingAddress) {
         copyOfShippingAddress: deepCopy(shippingAddress),
         copyOfBillingAddress: deepCopy(billingAddress),
         copyOfShippingRate: deepCopy(getShippingRateFor(shippingAddress)),
-        items: items
+        items: new Array()
     };
-    for (var i = 0; i <= shoppingCart.items.length; i++) {
+    for (var i = 0; i < shoppingCart.items.length; i++) {
         var shoppingCartItem = shoppingCart.items[i];
         var sellableItem = findSellableItem(shoppingCartItem.sellableItemId);
         order.items.push({
@@ -104,4 +101,7 @@ function checkout(shippingAddress, billingAddress) {
     }
     return order;
 }
+addToShoppingCart("redoma-2013-075", 1);
+addToShoppingCart("charme-2010-075", 2);
+console.log(JSON.stringify(checkout(customer.addresses[0], customer.addresses[0])));
 //# sourceMappingURL=model.js.map

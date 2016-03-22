@@ -126,8 +126,8 @@ interface Customer {
 interface Address {
     fullName: string;
     streetLine1: string;
-    streetLine2: string;
-    streetLine3: string;
+    streetLine2?: string;
+    streetLine3?: string;
     postalCode: string;
     townOrCity: string;
     countryId: string;
@@ -136,7 +136,7 @@ interface Address {
 interface BillingAddress extends Address {
     vatNumber: string;
     companyName: string;
-    shippingRegionId: string;
+    billingRegionId: string;
     isDefaultBillingAddress: boolean;
 }
 
@@ -184,8 +184,8 @@ let customer = {
     email: "dario.freire@gmail.com",
     addresses: [{
         fullName: "Dário Freire", streetLine1: "Rua do Não Digo", postalCode: "1234", townOrCity: "Porto", countryId: "PT",
-        vatNumber: "111 111 111", companyName: "CodingSkills", isDefaultBillingAddress: true,
-        shippingRegionId: "PT", phoneNumber: "111 111 111", isDefaultShippingAddress: true
+        billingRegionId: "pt-all", vatNumber: "111 111 111", companyName: "CodingSkills", isDefaultBillingAddress: true,
+        shippingRegionId: "pt-all", phoneNumber: "111 111 111", isDefaultShippingAddress: true
     }]
 }
 
@@ -201,11 +201,10 @@ function addToShoppingCart(sellableItemId: string, quantity: number) {
     shoppingCart.items.push({ sellableItemId: sellableItemId, quantity: quantity });
 }
 
-addToShoppingCart("redoma-2013-075", 1);
-addToShoppingCart("charme-2010-075", 2);
+
 
 function getShippingRateFor(shippingAddress: ShippingAddress): ShippingRate {
-    for (let i = 0; i <= shippingRates.length; i++) {
+    for (let i = 0; i < shippingRates.length; i++) {
         let shippingRate = shippingRates[i];
         if (shippingRate.shippingRegionIds.indexOf(shippingAddress.shippingRegionId) >= 0) {
             return shippingRate;
@@ -215,11 +214,11 @@ function getShippingRateFor(shippingAddress: ShippingAddress): ShippingRate {
 }
 
 function getVatRateFor(billingAddress: BillingAddress, sellableItem: SellableItem): VatRate {
-    for (let i = 0; i <= sellableItem.vatRateIds.length; i++) {
+    for (let i = 0; i < sellableItem.vatRateIds.length; i++) {
         let vatRateId = sellableItem.vatRateIds[i];
-        for (let j = 0; j <= vatRates.length; j++) {
+        for (let j = 0; j < vatRates.length; j++) {
             let vatRate = vatRates[j];
-            if (vatRate.shippingRegionIds.indexOf(billingAddress.shippingRegionId) >= 0) {
+            if (vatRateId === vatRate.id && vatRate.shippingRegionIds.indexOf(billingAddress.billingRegionId) >= 0) {
                 return vatRate;
             }
         }
@@ -228,7 +227,7 @@ function getVatRateFor(billingAddress: BillingAddress, sellableItem: SellableIte
 }
 
 function findSellableItem(id: string): SellableItem {
-    for (let i = 0; i <= products.length; i++) {
+    for (let i = 0; i < products.length; i++) {
         if (products[i].id === id) {
             return products[i];
         }
@@ -246,7 +245,7 @@ function checkout(shippingAddress: ShippingAddress, billingAddress: BillingAddre
         items: new Array<OrderItem>()
     };
 
-    for (let i = 0; i <= shoppingCart.items.length; i++) {
+    for (let i = 0; i < shoppingCart.items.length; i++) {
         let shoppingCartItem = shoppingCart.items[i];
         let sellableItem = findSellableItem(shoppingCartItem.sellableItemId);
         order.items.push({
@@ -258,3 +257,8 @@ function checkout(shippingAddress: ShippingAddress, billingAddress: BillingAddre
 
     return order;
 }
+
+
+addToShoppingCart("redoma-2013-075", 1);
+addToShoppingCart("charme-2010-075", 2);
+console.log(JSON.stringify(checkout(customer.addresses[0], customer.addresses[0])));
