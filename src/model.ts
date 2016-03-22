@@ -164,13 +164,6 @@ interface OrderItem {
 
 enum OrderStatus { PendingPayment, Payed, PendingShipping, Shipped }
 
-// Order(status, date, customerId, copyOfShippingAddress, copyOfBillingAddress, copyOfShippingRate)
-// 	OrderItem(
-// 		producId, productName,
-// 		variantId, variantName, variantWeight, variantaccountingCode, variantBasePrice, variantPromoPrice,
-// 		quantity, copyOfVatRate
-// 	)
-
 // interface Bottle extends SellableItem, PackageableItem, StockableItem, PhysicalItem {
 //     id: string;
 // }
@@ -243,7 +236,6 @@ function findSellableItem(id: string): SellableItem {
 }
 
 function checkout(shippingAddress: ShippingAddress, billingAddress: BillingAddress): Order {
-    let items: OrderItem[] = [];
     let order = {
         status: OrderStatus.PendingPayment,
         date: new Date(),
@@ -251,12 +243,7 @@ function checkout(shippingAddress: ShippingAddress, billingAddress: BillingAddre
         copyOfShippingAddress: deepCopy(shippingAddress),
         copyOfBillingAddress: deepCopy(billingAddress),
         copyOfShippingRate: deepCopy(getShippingRateFor(shippingAddress)),
-        items: OrderItem[]
-        // items: {
-        //     copyOfSellableItem: SellableItem;
-        //     copyOfVatRate: VatRate;
-        //     quantity: number;
-        // }[];
+        items: new Array<OrderItem>()
     };
 
     for (let i = 0; i <= shoppingCart.items.length; i++) {
