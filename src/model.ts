@@ -2,17 +2,20 @@ interface SellableItem {
     id: string;
     accountingCode: string;
     vatRateIds: string[];
-    prices: {
-        absoluteValue: number;
-        vatRegionIds: string[];
-    }[]
+    prices: SellableItemPrice[]
+}
+
+interface SellableItemPrice {
+    absoluteValue: number;
+    vatRegionIds: string[];
 }
 
 let products: SellableItem[]  = [
     { id: "redoma-2013-075", accountingCode: "001", vatRateIds: ["pt-iva-23"], prices: [
+        { absoluteValue: 45, vatRegionIds: ["es"] },
         { absoluteValue: 35, vatRegionIds: ["pt"] }
     ]},
-    { id: "charme-2010-075", accountingCode: "001", vatRateIds: ["pt-iva-23"], prices: [
+    { id: "charme-2010-075", accountingCode: "002", vatRateIds: ["pt-iva-23"], prices: [
         { absoluteValue: 55, vatRegionIds: ["pt"] }
     ]}
 ];
@@ -159,7 +162,10 @@ interface Order {
 }
 
 interface OrderItem {
-    copyOfSellableItem: SellableItem;
+    id: string;
+    accountingCode: string;
+    vatRateIds: string[];
+    price: SellableItemPrice;
     copyOfVatRate: VatRate;
     quantity: number;
 }
@@ -236,6 +242,15 @@ function findSellableItem(id: string): SellableItem {
     }
 }
 
+function getSellableItemPriceFor(sellableItem: SellableItem, vatRegionId: string): SellableItemPrice {
+    for (let i = 0; i < sellableItem.prices.length; i++) {
+        let price = sellableItem.prices[i];
+        if (price.vatRegionIds.indexOf(vatRegionId) >= 0) {
+            return price;
+        }
+    }
+}
+
 function checkout(shippingAddress: ShippingAddress, billingAddress: BillingAddress): Order {
     let order = {
         status: OrderStatus.PendingPayment,
@@ -251,7 +266,10 @@ function checkout(shippingAddress: ShippingAddress, billingAddress: BillingAddre
         let shoppingCartItem = shoppingCart.items[i];
         let sellableItem = findSellableItem(shoppingCartItem.sellableItemId);
         order.items.push({
-            copyOfSellableItem: deepCopy(sellableItem),
+            id: sellableItem.id,
+            accountingCode: sellableItem.accountingCode,
+            vatRateIds: sellableItem.vatRateIds,
+            price: getSellableItemPriceFor(sellableItem, billingAddress.vatRegionId),
             copyOfVatRate: deepCopy(getVatRateFor(billingAddress, sellableItem)),
             quantity: shoppingCartItem.quantity
         })
