@@ -251,7 +251,7 @@ function checkout(shippingAddress: ShippingAddress, billingAddress: BillingAddre
         copyOfShippingAddress: deepCopy(shippingAddress),
         copyOfBillingAddress: deepCopy(billingAddress),
         copyOfShippingRate: deepCopy(getShippingRateFor(shippingAddress)),
-        items: items
+        items: OrderItem[]
         // items: {
         //     copyOfSellableItem: SellableItem;
         //     copyOfVatRate: VatRate;
