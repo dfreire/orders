@@ -63,7 +63,16 @@ function getShippingRateFor(shippingAddress) {
     }
     throw "no shipping rate for given address";
 }
-function getVatRateFor(sellableItem) {
+function getVatRateFor(billingAddress, sellableItem) {
+    for (var i = 0; i <= sellableItem.vatRateIds.length; i++) {
+        var vatRateId = sellableItem.vatRateIds[i];
+        for (var j = 0; j <= vatRates.length; j++) {
+            var vatRate = vatRates[j];
+            if (vatRate.shippingRegionIds.indexOf(billingAddress.shippingRegionId) >= 0) {
+                return vatRate;
+            }
+        }
+    }
     return null;
 }
 function findSellableItem(id) {
@@ -89,7 +98,7 @@ function checkout(shippingAddress, billingAddress) {
         var sellableItem = findSellableItem(shoppingCartItem.sellableItemId);
         order.items.push({
             copyOfSellableItem: deepCopy(sellableItem),
-            copyOfVatRate: deepCopy(getVatRateFor(sellableItem)),
+            copyOfVatRate: deepCopy(getVatRateFor(billingAddress, sellableItem)),
             quantity: shoppingCartItem.quantity
         });
     }

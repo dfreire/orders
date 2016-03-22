@@ -136,6 +136,7 @@ interface Address {
 interface BillingAddress extends Address {
     vatNumber: string;
     companyName: string;
+    shippingRegionId: string;
     isDefaultBillingAddress: boolean;
 }
 
@@ -220,7 +221,16 @@ function getShippingRateFor(shippingAddress: ShippingAddress): ShippingRate {
     throw "no shipping rate for given address";
 }
 
-function getVatRateFor(sellableItem: SellableItem): VatRate {
+function getVatRateFor(billingAddress: BillingAddress, sellableItem: SellableItem): VatRate {
+    for (let i = 0; i <= sellableItem.vatRateIds.length; i++) {
+        let vatRateId = sellableItem.vatRateIds[i];
+        for (let j = 0; j <= vatRates.length; j++) {
+            let vatRate = vatRates[j];
+            if (vatRate.shippingRegionIds.indexOf(billingAddress.shippingRegionId) >= 0) {
+                return vatRate;
+            }
+        }
+    }
     return null;
 }
 
@@ -254,7 +264,7 @@ function checkout(shippingAddress: ShippingAddress, billingAddress: BillingAddre
         let sellableItem = findSellableItem(shoppingCartItem.sellableItemId);
         order.items.push({
             copyOfSellableItem: deepCopy(sellableItem),
-            copyOfVatRate: deepCopy(getVatRateFor(sellableItem)),
+            copyOfVatRate: deepCopy(getVatRateFor(billingAddress, sellableItem)),
             quantity: shoppingCartItem.quantity
         })
     }
