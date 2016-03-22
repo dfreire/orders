@@ -1,0 +1,11 @@
+{
+	"compileOnSave": true,
+	"compilerOptions": {
+		"noImplicitAny": true,
+		"removeComments": true,
+		"sourceMap": true
+	},
+    "exclude": [
+        "node_modules"
+    ]
+}

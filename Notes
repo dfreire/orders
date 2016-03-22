@@ -1,23 +1,3 @@
-Product(name)
-	Variant(name, accountingCode, vatRates, availableQuantity, weight, compatiblePackages)
-		BasePrice(value, shippingRegions, isDiscountByQuantityEnabled, isInPromotion, regularPrice)
-			DiscountByQuantity(fromQuantity, toQuantity, discountPercent)
-
-Pack(name, variants, accountingCode, vatRates, useVariantsCompatiblePackages, additionalWeight)
-	BasePrice(value, shippingRegions, isDiscountByQuantityEnabled, isInPromotion, regularPrice)
-		DiscountByQuantity(fromQuantity, toQuantity, discountPercent)
-
-Package(name, accountingCode, vatRates, weight, capacity)
-	AddicionalPrice(value, shippingRegions)
-
-VatRate(name, value, shippingRegions)
-
-Country(name)
-	ShippingRegion(name)
-
-ShippingRate(name, stragety[ lowest | highest ], flatValue, shippingRegions)
-	ByWeight(fromWeight, toWeight, value)
-	ByTotalPrice(fromTotalPrice, toTotalPrice, value)
 
 Customer(name, email, password)
 	Address(
@@ -25,9 +5,6 @@ Customer(name, email, password)
 		isBillingAddress, isDefaultBillingAddress, vatNumber, companyName,
 		isShippingAddress, isDefaultShippingAddress, shippingRegion, phoneNumber
 	)
-
-ShoppingCart(customerId)
-	ShoppingCartItem(variantId, quantity)
 
 Order(status, date, customerId, copyOfShippingAddress, copyOfBillingAddress, copyOfShippingRate)
 	OrderItem(
