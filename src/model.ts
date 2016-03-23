@@ -1,3 +1,5 @@
+module model {
+
 interface SellableItem {
     id: string;
     accountingCode: string;
@@ -6,18 +8,28 @@ interface SellableItem {
 }
 
 interface SellableItemPrice {
-    absoluteValue: number;
+    value: number;
     vatRegionIds: string[];
 }
 
-let products: SellableItem[]  = [
-    { id: "redoma-2013-075", accountingCode: "001", vatRateIds: ["pt-iva-23"], prices: [
-        { absoluteValue: 45, vatRegionIds: ["es"] },
-        { absoluteValue: 35, vatRegionIds: ["pt"] }
-    ]},
-    { id: "charme-2010-075", accountingCode: "002", vatRateIds: ["pt-iva-23"], prices: [
-        { absoluteValue: 55, vatRegionIds: ["pt"] }
-    ]}
+let products: SellableItem[] = [
+    {
+        id: "redoma-2013-075",
+        accountingCode: "001",
+        vatRateIds: ["pt-iva-23"],
+        prices: [
+            { value: 45, vatRegionIds: ["es"] },
+            { value: 35.25, vatRegionIds: ["pt"] }
+        ]
+    },
+    {
+        id: "charme-2010-075",
+        accountingCode: "002",
+        vatRateIds: ["pt-iva-23"],
+        prices: [
+            { value: 55, vatRegionIds: ["pt"] }
+        ]
+    }
 ];
 
 // "caixa-normal-6-075": { id: "caixa-normal-6-075" },
@@ -57,12 +69,12 @@ interface ItemFormat {
 interface ShippingRegion {
     id: string;
     name: string;
-    countryId: string;
+
 }
 interface VatRegion {
     id: string;
     name: string;
-    countryId: string;
+
 }
 
 interface VatRate {
@@ -72,7 +84,7 @@ interface VatRate {
 }
 
 let vatRegions: ShippingRegion[] = [
-    { id: "pt", name: "Portugal", countryId: "pt" }
+    { id: "pt", name: "Portugal" }
 ]
 
 let vatRates: VatRate[] = [
@@ -81,7 +93,7 @@ let vatRates: VatRate[] = [
 ];
 
 let shippingRegions: ShippingRegion[] = [
-    { id: "pt-all", name: "Portugal Continental", countryId: "pt" }
+    { id: "pt-all", name: "Portugal Continental" }
 ]
 
 
@@ -135,7 +147,7 @@ interface Address {
     streetLine3?: string;
     postalCode: string;
     townOrCity: string;
-    countryId: string;
+
 }
 
 interface BillingAddress extends Address {
@@ -159,15 +171,17 @@ interface Order {
     copyOfBillingAddress: BillingAddress;
     copyOfShippingRate: ShippingRate;
     items: OrderItem[];
+    total: number;
 }
 
 interface OrderItem {
     id: string;
-    accountingCode: string;
-    vatRateIds: string[];
-    price: SellableItemPrice;
+    copyOfSellableItemAccountingCode: string;
+    copyOfSellableItemVatRateIds: string[];
+    copyOfSellableItemPrice: SellableItemPrice;
     copyOfVatRate: VatRate;
     quantity: number;
+    subTotal: number;
 }
 
 enum OrderStatus { PendingPayment, Payed, PendingShipping, Shipped }
@@ -252,28 +266,40 @@ function getSellableItemPriceFor(sellableItem: SellableItem, vatRegionId: string
 }
 
 function checkout(shippingAddress: ShippingAddress, billingAddress: BillingAddress): Order {
-    let order = {
+    const CURRENCY_FACTOR = 1000;
+
+    let order: Order = {
         status: OrderStatus.PendingPayment,
         date: new Date(),
         customerId: customer.id,
         copyOfShippingAddress: deepCopy(shippingAddress),
         copyOfBillingAddress: deepCopy(billingAddress),
         copyOfShippingRate: deepCopy(getShippingRateFor(shippingAddress)),
-        items: new Array<OrderItem>()
+        items: new Array<OrderItem>(),
+        total: 0
     };
+
+    let total = order.copyOfShippingRate.flatValue * CURRENCY_FACTOR;
 
     for (let i = 0; i < shoppingCart.items.length; i++) {
         let shoppingCartItem = shoppingCart.items[i];
         let sellableItem = findSellableItem(shoppingCartItem.sellableItemId);
-        order.items.push({
+        let item: OrderItem = {
             id: sellableItem.id,
-            accountingCode: sellableItem.accountingCode,
-            vatRateIds: sellableItem.vatRateIds,
-            price: getSellableItemPriceFor(sellableItem, billingAddress.vatRegionId),
+            copyOfSellableItemAccountingCode: deepCopy(sellableItem.accountingCode),
+            copyOfSellableItemVatRateIds: deepCopy(sellableItem.vatRateIds),
+            copyOfSellableItemPrice: deepCopy(getSellableItemPriceFor(sellableItem, billingAddress.vatRegionId)),
             copyOfVatRate: deepCopy(getVatRateFor(billingAddress, sellableItem)),
-            quantity: shoppingCartItem.quantity
-        })
+            quantity: shoppingCartItem.quantity,
+            subTotal: 0
+        };
+        let subTotal = item.copyOfSellableItemPrice.value * CURRENCY_FACTOR * ( 1 + item.copyOfVatRate.percentValue) * item.quantity;
+        total += subTotal;
+        item.subTotal = subTotal / CURRENCY_FACTOR;
+        order.items.push(item);
     }
+
+    order.total = total / CURRENCY_FACTOR;
 
     return order;
 }
@@ -282,3 +308,5 @@ function checkout(shippingAddress: ShippingAddress, billingAddress: BillingAddre
 addToShoppingCart("redoma-2013-075", 1);
 addToShoppingCart("charme-2010-075", 2);
 console.log(JSON.stringify(checkout(customer.addresses[0], customer.addresses[0])));
+
+}
