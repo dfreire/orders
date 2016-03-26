@@ -19,7 +19,8 @@
         "typings/browser.d.ts",
         "src/index.ts",
         "src/model.ts",
-        "test/index_test.ts"
+        "test/index_test.ts",
+        "test/test-data.ts"
     ],
     "atom": {
         "rewriteTsconfig": true,
