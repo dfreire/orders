@@ -10,49 +10,47 @@ interface SellableItemPrice {
     vatRegionIds: string[];
 }
 
-interface ShoppingCartItem {
-    id: string;
-    quantity: number;
-}
-
-interface Order {
-    status: OrderStatus;
+export class Order {
     date: Date;
+    status: OrderStatus;
     customerId: string;
     // copyOfShippingAddress: ShippingAddress;
     // copyOfBillingAddress: BillingAddress;
     // copyOfShippingRate: ShippingRate;
     items: OrderItem[];
     total: number;
+
+    constructor(customerId: string) {
+        this.date = new Date();
+        this.status = OrderStatus.PendingPayment;
+        this.customerId = customerId;
+        this.items = new Array<OrderItem>();
+    }
+
+    addItem(id: string, quantity: number) {
+        this.items.push({ id: id, quantity: quantity });
+    }
 }
 
 enum OrderStatus { PendingPayment, Payed, PendingShipping, Shipped }
 
 interface OrderItem {
     id: string;
-    copyOfSellableItemAccountingCode: string;
-    copyOfSellableItemVatRateIds: string[];
-    copyOfSellableItemPrice: SellableItemPrice;
+    // copyOfSellableItemAccountingCode: string;
+    // copyOfSellableItemVatRateIds: string[];
+    // copyOfSellableItemPrice: SellableItemPrice;
     // copyOfVatRate: VatRate;
     quantity: number;
-    subTotal: number;
+    // subTotal: number;
 }
 
 export class ShoppingCart {
-    private customerId: string;
-    private items: ShoppingCartItem[];
+    customerId: string;
+    items: ShoppingCartItem[];
 
     constructor(customerId: string) {
         this.customerId = customerId;
         this.items = [];
-    }
-
-    getCustomerId() {
-        return this.customerId;
-    }
-
-    getItems(): ShoppingCartItem[] {
-        return this.items;
     }
 
     addItem(id: string, quantity: number) {
@@ -60,6 +58,15 @@ export class ShoppingCart {
     }
 
     checkout(): Order {
-        return null;
+        const order = new Order(this.customerId);
+        _.each(this.items, (item) => {
+            order.addItem(item.id, item.quantity);
+        });
+        return order;
     }
+}
+
+interface ShoppingCartItem {
+    id: string;
+    quantity: number;
 }
