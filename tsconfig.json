@@ -1,16 +1,28 @@
 {
-	"compileOnSave": true,
-	"compilerOptions": {
-		"noImplicitAny": true,
-		"removeComments": true,
-		"sourceMap": true,
-		"module": "commonjs",
-		"target": "es5"
-	},
-    "exclude": [
-        "node_modules"
+    "compileOnSave": true,
+    "compilerOptions": {
+        "outDir": "./atom-typescript-out/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react"
+    },
+    "filesGlob": [
+        "typings/browser.d.ts",
+        "src/**/*.tsx",
+        "src/**/*.ts",
+        "test/**/*.ts",
+        "!node_modules/**"
     ],
-	"atom": {
-		"formatOnSave": true
-	}
+    "files": [
+        "typings/browser.d.ts",
+        "src/index.ts",
+        "src/model.ts",
+        "test/index_test.ts"
+    ],
+    "atom": {
+        "rewriteTsconfig": true,
+        "formatOnSave": true
+    }
 }
