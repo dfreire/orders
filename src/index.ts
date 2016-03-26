@@ -1,5 +1,17 @@
+interface SellableItem {
+    id: string;
+    accountingCode: string;
+    vatRateIds: string[];
+    prices: SellableItemPrice[]
+}
+
+interface SellableItemPrice {
+    value: number;
+    vatRegionIds: string[];
+}
+
 interface ShoppingCartItem {
-    productId: string;
+    id: string;
     quantity: number;
 }
 
@@ -10,11 +22,15 @@ export class ShoppingCart {
         this.items = [];
     }
 
-    add(productId: string, quantity: number) {
-        this.items.push({ productId: productId, quantity: quantity });
-    }
-
     getItems(): ShoppingCartItem[] {
         return this.items;
+    }
+
+    addItem(id: string, quantity: number) {
+        this.items.push({ id: id, quantity: quantity });
+    }
+
+    checkout() {
+
     }
 }
