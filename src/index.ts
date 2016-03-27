@@ -1,11 +1,56 @@
+interface Address {
+    fullName: string;
+    streetLine1: string;
+    streetLine2?: string;
+    streetLine3?: string;
+    postalCode: string;
+    townOrCity: string;
+}
+
+interface BillingAddress extends Address {
+    companyName: string;
+    vatNumber: string;
+    vatRegionId: string;
+    isDefaultBillingAddress: boolean;
+}
+
+interface ShippingAddress extends Address {
+    shippingRegionId: string;
+    phoneNumber: string;
+    isDefaultShippingAddress: boolean;
+}
+
 export class Customer {
     id: string;
     shoppingCart: ShoppingCart;
+    addresses: Address[];
 
     constructor(id: string) {
         this.id = id;
         this.shoppingCart = new ShoppingCart(id);
+        this.addresses = new Array<Address>();
     };
+
+    addAddress(address: Address) {
+        this.addresses.push(address);
+        // TODO ajax request
+    }
+
+    removeAddress(address: Address) {
+        // TODO ajax request
+    }
+
+    getDefaultBillingAddress(): BillingAddress {
+        return <BillingAddress>_.find(this.addresses, (address) => {
+            return /*(address instanceof BillingAddress) &&*/ (<BillingAddress>address).isDefaultBillingAddress;
+        });
+    }
+
+    getDefaultShippingAddress(): ShippingAddress {
+        return <ShippingAddress>_.find(this.addresses, (address) => {
+            return /*(address instanceof ShippingAddress) &&*/ (<ShippingAddress>address).isDefaultShippingAddress;
+        });
+    }
 }
 
 export class ShoppingCart {
