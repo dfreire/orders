@@ -10,7 +10,7 @@ suite("Given a Customer", () => {
     let customer: Customer;
 
     setup(() => {
-        customer = new Customer(data.customers[0].id);
+        customer = new Customer("customer-in-portugal");
     });
 
     suite("the instance", () => {
@@ -18,7 +18,7 @@ suite("Given a Customer", () => {
             assert.isObject(customer);
         });
         test("should have an id", () => {
-            assert.equal(customer.id, data.customers[0].id);
+            assert.equal(customer.id, "customer-in-portugal");
         });
         test("should have a shopping cart", () => {
             assert.isObject(customer.shoppingCart);
@@ -28,19 +28,19 @@ suite("Given a Customer", () => {
 
     suite("when the customer adds products to the shopping cart", () => {
         setup(() => {
-            customer.shoppingCart.addItem(data.sellableItems[0].id, 3);
-            customer.shoppingCart.addItem(data.sellableItems[2].id, 2);
+            customer.shoppingCart.addItem("redoma-2006-0.75", 3);
+            customer.shoppingCart.addItem("tiara-2014-1.5", 2);
         });
 
         test("then the products should be there", () => {
             assert.isArray(customer.shoppingCart.items);
             assert.equal(customer.shoppingCart.items.length, 2);
 
-            const item1 = _(customer.shoppingCart.items).find((item: any) => item.id === data.sellableItems[0].id);
+            const item1 = _(customer.shoppingCart.items).find((item: any) => item.id === "redoma-2006-0.75");
             assert.isObject(item1);
             assert.equal(item1.quantity, 3);
 
-            const item2 = _(customer.shoppingCart.items).find((item: any) => item.id === data.sellableItems[2].id);
+            const item2 = _(customer.shoppingCart.items).find((item: any) => item.id === "tiara-2014-1.5");
             assert.isObject(item2);
             assert.equal(item2.quantity, 2);
         });
