@@ -1,13 +1,38 @@
-interface SellableItem {
+export class Customer {
     id: string;
-    accountingCode: string;
-    vatRateIds: string[];
-    prices: SellableItemPrice[]
+    shoppingCart: ShoppingCart;
+
+    constructor(id: string) {
+        this.id = id;
+        this.shoppingCart = new ShoppingCart(id);
+    };
 }
 
-interface SellableItemPrice {
-    value: number;
-    vatRegionIds: string[];
+export class ShoppingCart {
+    customerId: string;
+    items: ShoppingCartItem[];
+
+    constructor(customerId: string) {
+        this.customerId = customerId;
+        this.items = [];
+    }
+
+    addItem(id: string, quantity: number) {
+        this.items.push({ id: id, quantity: quantity });
+    }
+
+    checkout(): Order {
+        const order = new Order(this.customerId);
+        _.each(this.items, (item) => {
+            order.addItem(item.id, item.quantity);
+        });
+        return order;
+    }
+}
+
+interface ShoppingCartItem {
+    id: string;
+    quantity: number;
 }
 
 export class Order {
@@ -44,29 +69,14 @@ interface OrderItem {
     // subTotal: number;
 }
 
-export class ShoppingCart {
-    customerId: string;
-    items: ShoppingCartItem[];
-
-    constructor(customerId: string) {
-        this.customerId = customerId;
-        this.items = [];
-    }
-
-    addItem(id: string, quantity: number) {
-        this.items.push({ id: id, quantity: quantity });
-    }
-
-    checkout(): Order {
-        const order = new Order(this.customerId);
-        _.each(this.items, (item) => {
-            order.addItem(item.id, item.quantity);
-        });
-        return order;
-    }
+interface SellableItem {
+    id: string;
+    accountingCode: string;
+    vatRateIds: string[];
+    prices: SellableItemPrice[]
 }
 
-interface ShoppingCartItem {
-    id: string;
-    quantity: number;
+interface SellableItemPrice {
+    value: number;
+    vatRegionIds: string[];
 }

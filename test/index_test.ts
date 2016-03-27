@@ -3,61 +3,65 @@ import { assert } from "chai";
 import { spy } from "sinon";
 import * as _ from "lodash";
 
-import { ShoppingCart, Order } from "../src/index";
+import { Customer, ShoppingCart, Order } from "../src/index";
 import data from "./test-data.ts";
 
-suite("Given a ShoppingCart", () => {
-    let shoppingCart: ShoppingCart;
+suite("Given a Customer", () => {
+    let customer: Customer;
 
     setup(() => {
-        shoppingCart = new ShoppingCart(data.customers[0].id);
+        customer = new Customer(data.customers[0].id);
     });
 
     suite("the instance", () => {
         test("should exist", () => {
-            assert.isObject(shoppingCart);
+            assert.isObject(customer);
         });
-        test("should have a customerId", () => {
-            assert.equal(shoppingCart.customerId, data.customers[0].id);
+        test("should have an id", () => {
+            assert.equal(customer.id, data.customers[0].id);
+        });
+        test("should have a shopping cart", () => {
+            assert.isObject(customer.shoppingCart);
+            assert.instanceOf(customer.shoppingCart, ShoppingCart);
         });
     });
 
-    suite("when we add products to it", () => {
+    suite("when the customer adds products to the shopping cart", () => {
         setup(() => {
-            shoppingCart.addItem(data.sellableItems[0].id, 3);
-            shoppingCart.addItem(data.sellableItems[2].id, 2);
+            customer.shoppingCart.addItem(data.sellableItems[0].id, 3);
+            customer.shoppingCart.addItem(data.sellableItems[2].id, 2);
         });
 
         test("then the products should be there", () => {
-            assert.isArray(shoppingCart.items);
-            assert.equal(shoppingCart.items.length, 2);
+            assert.isArray(customer.shoppingCart.items);
+            assert.equal(customer.shoppingCart.items.length, 2);
 
-            const item1 = _(shoppingCart.items).find((item: any) => item.id === data.sellableItems[0].id);
+            const item1 = _(customer.shoppingCart.items).find((item: any) => item.id === data.sellableItems[0].id);
             assert.isObject(item1);
             assert.equal(item1.quantity, 3);
 
-            const item2 = _(shoppingCart.items).find((item: any) => item.id === data.sellableItems[2].id);
+            const item2 = _(customer.shoppingCart.items).find((item: any) => item.id === data.sellableItems[2].id);
             assert.isObject(item2);
             assert.equal(item2.quantity, 2);
         });
 
-        suite("when we checkout", () => {
+        suite("when the customer checks out", () => {
             let order: Order;
 
             setup(() => {
-                order = shoppingCart.checkout();
+                order = customer.shoppingCart.checkout();
             });
 
             test("then an order should be produced", () => {
                 assert.isObject(order);
             });
             test("then the order should have the same customerId", () => {
-                assert.equal(order.customerId, shoppingCart.customerId);
+                assert.equal(order.customerId, customer.shoppingCart.customerId);
             });
             test("then the order should contain the shopping cart items", () => {
                 assert.isArray(order.items);
-                assert.equal(order.items.length, shoppingCart.items.length);
-                _.each(shoppingCart.items, (shoppingCartItem) => {
+                assert.equal(order.items.length, customer.shoppingCart.items.length);
+                _.each(customer.shoppingCart.items, (shoppingCartItem) => {
                     const item = _(order.items).find((item: any) => item.id === shoppingCartItem.id);
                     assert.isObject(item);
                     assert.equal(item.quantity, shoppingCartItem.quantity);
