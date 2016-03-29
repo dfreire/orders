@@ -1,6 +1,6 @@
-interface Customer {
+interface User {
     id: string;
-    basket: Basket;
+    basket: ShoppingBasket;
 }
 
 interface Address {
@@ -27,12 +27,12 @@ interface ShippingAddress extends Address {
     isDefaultShippingAddress: boolean;
 }
 
-interface Basket {
+interface ShoppingBasket {
     customerId: string;
-    items: BasketItem[];
+    items: ShoppingBasketItem[];
 }
 
-interface BasketItem {
+interface ShoppingBasketItem {
     id: string;
     quantity: number;
 }
@@ -72,55 +72,72 @@ interface SellableItemPrice {
     vatRegionIds: string[];
 }
 
-function addCustomerAddress(address: Address) {
-    // TODO
+interface UserEndpoint {
 }
 
-function removeCustomerAddress(addressId: string) {
-    // TODO
+class UserEndpointJQuery implements UserEndpoint {
 }
 
-function getDefaultCustomerBillingAddress(): BillingAddress {
-    // TODO
-    return null;
+interface OrderEndpoint {
 }
 
-function getDefaultCustomerShippingAddress(): ShippingAddress {
-    // TODO
-    return null;
+class OrderEndpointJQuery implements OrderEndpoint {
 }
 
-function getCustomerBillingAddresses(): BillingAddress[] {
-    // TODO
-    return null
+class User {
+    constructor(userEndpoint: UserEndpoint) {
+    }
+    signup() {
+    }
+    signin() {
+    }
+    resetPassword() {
+    }
+    signout() {
+    }
+    changeEmail() {
+    }
+    changePassword() {
+    }
+    updateProfile() {
+    }
+    addAddress(address: Address) {
+    }
+    removeAddress(addressId: string) {
+    }
+    getDefaultBillingAddress(): BillingAddress {
+        return null;
+    }
+    getDefaultShippingAddress(): BillingAddress {
+        return null;
+    }
+    getShoppingBasket(): ShoppingBasket {
+        return null;
+    }
 }
 
-function getCustomerShippingAddresses(): ShippingAddress[] {
-    // TODO
-    return null
+class ShoppingBasket {
+    putItem(itemId: string, quantity: number) {
+    }
+    removeItem(itemId: string, quantity: number) {
+    }
+    checkout(): Order {
+        return null;
+    }
+}
+class Order {
+    constructor(orderEndpoint: OrderEndpoint) {
+    }
+    setShippingAddress(shippingAddress: ShippingAddress) {
+    }
+    setBillingAddress(billingAddress: BillingAddress) {
+    }
+    confirm() {
+    }
 }
 
-function putInBasket(itemId: string, quantity: number) {
-    // TODO
-}
-
-function removeFromBasket(itemId: string, quantity: number) {
-    // TODO
-}
-
-function checkout(): Order {
-    // TODO
-    return null;
-}
-
-function setOrderShippingAddress(shippingAddress: ShippingAddress) {
-    // TODO
-}
-
-function setOrderBillingAddress(billingAddress: BillingAddress) {
-    // TODO
-}
-
-function confirmCheckout() {
-    // TODO
+function setup() {
+    const userEndpoint = new UserEndpointJQuery();
+    const user = new User(userEndpoint);
+    const orderEndpoint = new OrderEndpointJQuery();
 }
