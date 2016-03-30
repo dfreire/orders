@@ -72,72 +72,58 @@ interface SellableItemPrice {
     vatRegionIds: string[];
 }
 
-interface UserEndpoint {
+function signup(email: string, pasword: string, callback: Function) {
+
 }
 
-class UserEndpointJQuery implements UserEndpoint {
+function changeEmail(userId: string, password: string, newEmail: string, callback: Function) {
+
 }
 
-interface OrderEndpoint {
+function addCustomerAddress(customerId: string, address: Address, callback: Function) {
+
 }
 
-class OrderEndpointJQuery implements OrderEndpoint {
+function updateCustomerAddress(customerId: string, address: Address, callback: Function) {
+
 }
 
-class User {
-    constructor(userEndpoint: UserEndpoint) {
-    }
-    signup() {
-    }
-    signin() {
-    }
-    resetPassword() {
-    }
-    signout() {
-    }
-    changeEmail() {
-    }
-    changePassword() {
-    }
-    updateProfile() {
-    }
-    addAddress(address: Address) {
-    }
-    removeAddress(addressId: string) {
-    }
-    getDefaultBillingAddress(): BillingAddress {
-        return null;
-    }
-    getDefaultShippingAddress(): BillingAddress {
-        return null;
-    }
-    getShoppingBasket(): ShoppingBasket {
-        return null;
-    }
+function removeCustomerAddress(customerId: string, addressId: string, callback: Function) {
+
 }
 
-class ShoppingBasket {
-    putItem(itemId: string, quantity: number) {
-    }
-    removeItem(itemId: string, quantity: number) {
-    }
-    checkout(): Order {
-        return null;
-    }
-}
-class Order {
-    constructor(orderEndpoint: OrderEndpoint) {
-    }
-    setShippingAddress(shippingAddress: ShippingAddress) {
-    }
-    setBillingAddress(billingAddress: BillingAddress) {
-    }
-    confirm() {
-    }
+function getDefaultCustomerBillingAddress(customerId: string): BillingAddress {
+    return null;
 }
 
-function setup() {
-    const userEndpoint = new UserEndpointJQuery();
-    const user = new User(userEndpoint);
-    const orderEndpoint = new OrderEndpointJQuery();
+function getDefaultCustomerShippingAddress(customerId: string): ShippingAddress {
+    return null;
+}
+
+function getShoppingBasket(): ShoppingBasket {
+return null;
+}
+
+function putItemInShoppingBasket(itemId: string, quantity: number) {
+
+}
+
+function removeItemFromShoppingBasket(itemId: string) {
+
+}
+
+function checkout(): Order {
+    return null;
+}
+
+function setOrderShippingAddress(orderId: Order, shippingAddress: ShippingAddress) {
+
+}
+
+function setOrderBillingAddress(order: Order, billingAddress: BillingAddress) {
+
+}
+
+function confirmOrder(order: Order, callback: Function) {
+
 }
