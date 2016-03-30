@@ -1,6 +1,9 @@
+
+
+enum OrderStatus { PendingPayment, Payed, PendingShipping, Shipped }
+
 interface User {
     id: string;
-    basket: ShoppingBasket;
 }
 
 interface Address {
@@ -48,7 +51,7 @@ interface Order {
     total: number;
 }
 
-enum OrderStatus { PendingPayment, Payed, PendingShipping, Shipped }
+
 
 interface OrderItem {
     id: string;
@@ -101,7 +104,7 @@ function getDefaultCustomerShippingAddress(customerId: string): ShippingAddress 
 }
 
 function getShoppingBasket(): ShoppingBasket {
-return null;
+    return null;
 }
 
 function putItemInShoppingBasket(itemId: string, quantity: number) {

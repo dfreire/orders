@@ -19,6 +19,7 @@
         "typings/browser.d.ts",
         "src/index.ts",
         "src/model.ts",
+        "src/state.ts",
         "test/index_test.ts",
         "test/test-data.ts"
     ],
