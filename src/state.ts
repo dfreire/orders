@@ -4,8 +4,9 @@ export interface State {
     // addresses: Address[];
     sellableItems: SellableItem[];
     sellableItemPrices: SellableItemPrice[];
-    currentOrder: CurrentOrder;
-    currentOrderItems: CurrentOrderItem[];
+    shoppingBasketItems: ShoppingBastetItems[];
+    currentOrder: Order;
+    currentOrderItems: OrderItem[];
 }
 
 interface User {
@@ -24,13 +25,19 @@ interface SellableItemPrice {
     // defaultRegionId: string; // TODO
 }
 
-interface CurrentOrder {
-    total: number;
+interface ShoppingBastetItems {
+    sellableItemId: string;
+    quantity: number;
 }
 
-interface CurrentOrderItem {
-    sellableItemId: string;
-    sellableItemPriceId: string;
+interface Order {
+    total: number;
+    items: OrderItem[]
+}
+
+interface OrderItem {
+    copyOfSellableItem: SellableItem;
+    copyOfSellableItemPrice: SellableItemPrice;
     quantity: number;
     subTotal: number;
 }

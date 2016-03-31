@@ -7,16 +7,15 @@ const newState: State = {
     },
     sellableItems: [],
     sellableItemPrices: [],
-    currentOrder: {
-        total: 0
-    },
+    shoppingBasketItems: [],
+    currentOrder: undefined,
     currentOrderItems: []
 };
 
 export function app(state: State = newState, action: actions.Action): State {
     switch (action.type) {
-        case actions.PUT_IN_CURRENT_ORDER:
-            return putInCurrentOrder(state, action as actions.PutInCurrentOrderAction);
+        case actions.PUT_IN_SHOPPING_BASKET:
+            return putInShoppingBasket(state, action as actions.PutInShoppingBasketAction);
         case actions.REMOVE_FROM_CURRENT_ORDER:
             break;
         case actions.SET_CURRENT_ORDER_SHIPPING_ADDRESS:
@@ -28,26 +27,27 @@ export function app(state: State = newState, action: actions.Action): State {
     }
 }
 
-function putInCurrentOrder(state: State, action: actions.PutInCurrentOrderAction): State {
+function putInShoppingBasket(state: State, action: actions.PutInShoppingBasketAction): State {
     let found = false;
 
-    const currentOrderItems = _.map(state.currentOrderItems, (item) => {
+    const shoppingBasketItems = _.map(state.shoppingBasketItems, (item) => {
         if (item.sellableItemId === action.sellableItemId) {
             found = true;
             return {
                 sellableItemId: item.sellableItemId,
                 quantity: item.quantity + action.quantity
             };
+        } else {
+            return item;
         }
-        return item;
     });
 
     if (!found) {
-        currentOrderItems.push({
+        shoppingBasketItems.push({
             sellableItemId: action.sellableItemId,
             quantity: action.quantity
         })
     }
 
-    return _.assign({}, state, { currentOrderItems: currentOrderItems }) as State;
+    return _.assign({}, state, { shoppingBasketItems: shoppingBasketItems }) as State;
 }

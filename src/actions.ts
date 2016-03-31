@@ -2,19 +2,12 @@ export interface Action {
     type: string;
 }
 
-export const PUT_IN_CURRENT_ORDER = "PUT_IN_CURRENT_ORDER";
-
-export interface PutInCurrentOrderAction extends Action {
-    sellableItemId: string,
-    quantity: number
-}
-
-export function putInCurrentOrder(sellableItemId: string, quantity: number): PutInCurrentOrderAction {
-    return {
-        type: PUT_IN_CURRENT_ORDER,
-        sellableItemId: sellableItemId,
-        quantity: quantity
-    };
+export const PUT_IN_SHOPPING_BASKET = "PUT_IN_SHOPPING_BASKET";
+export class PutInShoppingBasketAction implements Action {
+    type: string = PUT_IN_SHOPPING_BASKET;
+    sellableItemId: string;
+    quantity: number;
+    constructor(sellableItemId: string, quantity: number) { }
 }
 
 export const REMOVE_FROM_CURRENT_ORDER = "REMOVE_FROM_CURRENT_ORDER";
