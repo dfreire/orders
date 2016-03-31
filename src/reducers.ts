@@ -16,7 +16,7 @@ const newState: State = {
 export function app(state: State = newState, action: actions.Action): State {
     switch (action.type) {
         case actions.PUT_IN_CURRENT_ORDER:
-            return putInCurrentOrder(state, action);
+            return putInCurrentOrder(state, action as actions.PutInCurrentOrderAction);
         case actions.REMOVE_FROM_CURRENT_ORDER:
             break;
         case actions.SET_CURRENT_ORDER_SHIPPING_ADDRESS:
@@ -28,7 +28,7 @@ export function app(state: State = newState, action: actions.Action): State {
     }
 }
 
-function putInCurrentOrder(state: State, action: actions.Action): State {
+function putInCurrentOrder(state: State, action: actions.PutInCurrentOrderAction): State {
     let found = false;
 
     const currentOrderItems = _.map(state.currentOrderItems, (item) => {

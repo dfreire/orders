@@ -4,12 +4,17 @@ export interface Action {
 
 export const PUT_IN_CURRENT_ORDER = "PUT_IN_CURRENT_ORDER";
 
-export function putInCurrentOrder(sellableItemId: string, quantity: number): Action {
+export interface PutInCurrentOrderAction extends Action {
+    sellableItemId: string,
+    quantity: number
+}
+
+export function putInCurrentOrder(sellableItemId: string, quantity: number): PutInCurrentOrderAction {
     return {
         type: PUT_IN_CURRENT_ORDER,
         sellableItemId: sellableItemId,
         quantity: quantity
-    } as Action;
+    };
 }
 
 export const REMOVE_FROM_CURRENT_ORDER = "REMOVE_FROM_CURRENT_ORDER";
