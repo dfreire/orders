@@ -1,27 +1,22 @@
 import { State } from "./state";
 import * as actions from "./actions";
 
-function createNewState(): State {
-    return {
-        user: {
-            id: undefined
-        },
-        sellableItems: [],
-        sellableItemPrices: [],
-        currentOrder: {
-            total: 0
-        },
-        currentOrderItems: []
-    };
-}
+const newState: State = {
+    user: {
+        id: undefined
+    },
+    sellableItems: [],
+    sellableItemPrices: [],
+    currentOrder: {
+        total: 0
+    },
+    currentOrderItems: []
+};
 
-export function app(state: State, action: actions.Action) {
-    if (typeof state === "undefined") {
-        state = createNewState();
-    }
+export function app(state: State = newState, action: actions.Action): State {
     switch (action.type) {
         case actions.PUT_IN_CURRENT_ORDER:
-            break;
+            return putInCurrentOrder(state, action);
         case actions.REMOVE_FROM_CURRENT_ORDER:
             break;
         case actions.SET_CURRENT_ORDER_SHIPPING_ADDRESS:
@@ -31,4 +26,28 @@ export function app(state: State, action: actions.Action) {
         default:
             return state;
     }
+}
+
+function putInCurrentOrder(state: State, action: actions.Action): State {
+    let found = false;
+
+    const currentOrderItems = _.map(state.currentOrderItems, (item) => {
+        if (item.sellableItemId === action.sellableItemId) {
+            found = true;
+            return {
+                sellableItemId: item.sellableItemId,
+                quantity: item.quantity + action.quantity
+            };
+        }
+        return item;
+    });
+
+    if (!found) {
+        currentOrderItems.push({
+            sellableItemId: action.sellableItemId,
+            quantity: action.quantity
+        })
+    }
+
+    return _.assign({}, state, { currentOrderItems: currentOrderItems }) as State;
 }
