@@ -17,9 +17,11 @@
     ],
     "files": [
         "typings/browser.d.ts",
+        "src/actions.ts",
         "src/api.ts",
         "src/index.ts",
         "src/model.ts",
+        "src/reducers.ts",
         "src/state.ts",
         "test/index_test.ts",
         "test/test-data.ts"

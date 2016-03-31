@@ -1,4 +1,4 @@
-interface State {
+export interface State {
     user: User;
     // session: Session;
     // addresses: Address[];
