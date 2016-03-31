@@ -17,6 +17,7 @@
     ],
     "files": [
         "typings/browser.d.ts",
+        "src/api.ts",
         "src/index.ts",
         "src/model.ts",
         "src/state.ts",

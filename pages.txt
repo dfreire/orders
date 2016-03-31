@@ -1,0 +1,7 @@
+[ ] signin
+[ ] signup
+[ ] reset-password
+[ ] reset-password-result
+[ ] shopping-cart
+
+[ ] order-history
