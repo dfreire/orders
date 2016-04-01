@@ -1,5 +1,10 @@
 import { State } from "./state";
-import * as actions from "./actions";
+import { Action } from "./actions";
+
+import {ADD_TO_SHOPPING_BASKET, AddToShoppingBasketAction, onAddToShoppingBasket} from "./add-to-shopping-basket";
+import {REMOVE_FROM_SHOPPING_BASKET, RemoveFromShoppingBasketAction, onRemoveFromShoppingBasket} from "./remove-from-shopping-basket";
+import {SET_ORDER_BILLING_ADDRESS, SetOrderBillingAddressAction, onSetOrderBillingAddress} from "./set-order-billing-address";
+import {SET_ORDER_SHIPPING_ADDRESS, SetOrderShippingAddressAction, setOrderShippingAddress} from "./set-order-shipping-address";
 
 const newState: State = {
     user: {
@@ -12,10 +17,10 @@ const newState: State = {
     currentOrderItems: []
 };
 
-export function app(state: State = newState, action: actions.Action): State {
+export function app(state: State = newState, action: Action): State {
     switch (action.type) {
-        case actions.PUT_IN_SHOPPING_BASKET:
-            return putInShoppingBasket(state, action as actions.PutInShoppingBasketAction);
+        case ADD_TO_SHOPPING_BASKET:
+            return onAddToShoppingBasket(state, action as AddToShoppingBasketAction);
         case actions.REMOVE_FROM_CURRENT_ORDER:
             break;
         case actions.SET_CURRENT_ORDER_SHIPPING_ADDRESS:
@@ -25,29 +30,4 @@ export function app(state: State = newState, action: actions.Action): State {
         default:
             return state;
     }
-}
-
-function putInShoppingBasket(state: State, action: actions.PutInShoppingBasketAction): State {
-    let found = false;
-
-    const shoppingBasketItems = _.map(state.shoppingBasketItems, (item) => {
-        if (item.sellableItemId === action.sellableItemId) {
-            found = true;
-            return {
-                sellableItemId: item.sellableItemId,
-                quantity: item.quantity + action.quantity
-            };
-        } else {
-            return item;
-        }
-    });
-
-    if (!found) {
-        shoppingBasketItems.push({
-            sellableItemId: action.sellableItemId,
-            quantity: action.quantity
-        })
-    }
-
-    return _.assign({}, state, { shoppingBasketItems: shoppingBasketItems }) as State;
 }

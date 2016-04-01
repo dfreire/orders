@@ -18,10 +18,14 @@
     "files": [
         "typings/browser.d.ts",
         "src/actions.ts",
+        "src/add-to-shopping-basket.ts",
         "src/api.ts",
         "src/index.ts",
         "src/model.ts",
         "src/reducers.ts",
+        "src/remove-from-shopping-basket.ts",
+        "src/set-order-billing-address.ts",
+        "src/set-order-shipping-address.ts",
         "src/state.ts",
         "test/index_test.ts",
         "test/test-data.ts"
