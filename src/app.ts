@@ -1,5 +1,4 @@
-import { State } from "./state";
-import { Action } from "./actions";
+import { Action, State } from "./types";
 
 import {ADD_TO_SHOPPING_BASKET, AddToShoppingBasketAction, onAddToShoppingBasket} from "./add-to-shopping-basket";
 import {REMOVE_FROM_SHOPPING_BASKET, RemoveFromShoppingBasketAction, onRemoveFromShoppingBasket} from "./remove-from-shopping-basket";

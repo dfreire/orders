@@ -1,5 +1,4 @@
-import { Action } from "./actions";
-import { State } from "./state";
+import { Action, State } from "./types";
 
 export const SET_ORDER_BILLING_ADDRESS = "SET_ORDER_BILLING_ADDRESS";
 

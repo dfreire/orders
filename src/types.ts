@@ -1,3 +1,6 @@
+export interface Action {
+    type: string;
+}
 
 export interface State {
     user: User;
