@@ -1,7 +1,27 @@
-[ ] signin
-[ ] signup
+[ ] product
+    [.] add item to shopping basket
+
+[ ] shopping-basket
+    [.] increment/decrement item quantity
+    [.] remove item from shopping basket
+
+[ ] checkout (wizard)
+    [ ] sign-in or sign-up (modal !?)
+    [ ] select billing address or create new address
+    [ ] select shipping address or create new address
+    [ ] select payment method
+    [ ] review and confirm
+
+[ ] sign-in
+[ ] sign-up
 [ ] reset-password
 [ ] reset-password-result
-[ ] shopping-cart
 
-[ ] order-history
+[ ] user-profile
+    [ ] change email
+    [ ] change password
+[ ] user-addresses
+    [ ] create new address
+    [ ] update address
+    [ ] remove address
+[ ] user-orders

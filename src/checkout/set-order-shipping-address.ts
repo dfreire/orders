@@ -1,4 +1,4 @@
-import { Action, State } from "./types";
+import { Action, State } from "../types";
 
 export const SET_ORDER_SHIPPING_ADDRESS = "SET_ORDER_SHIPPING_ADDRESS";
 

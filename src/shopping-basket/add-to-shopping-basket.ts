@@ -1,4 +1,4 @@
-import { Action, State } from "./types";
+import { Action, State } from "../types";
 
 export const ADD_TO_SHOPPING_BASKET = "ADD_TO_SHOPPING_BASKET";
 

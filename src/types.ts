@@ -3,18 +3,41 @@ export interface Action {
 }
 
 export interface State {
-    user: User;
-    // session: Session;
+    // user: User;
+    session: Session; // persisted to disk
     // addresses: Address[];
     sellableItems: SellableItem[];
     sellableItemPrices: SellableItemPrice[];
-    shoppingBasketItems: ShoppingBastetItems[];
-    currentOrder: Order;
-    currentOrderItems: OrderItem[];
+    shoppingBasketItems: ShoppingBastetItems[]; // persisted to disk
+    // currentOrder: Order;
+    // currentOrderItems: OrderItem[];
 }
 
 interface User {
     id: string;
+    email: string;
+}
+
+interface Session {
+    id: string;
+}
+
+interface Address {
+    id: string;
+    userId: string,
+    fullName: string;
+    companyName: string;
+    streetLine1: string;
+    streetLine2?: string;
+    streetLine3?: string;
+    postalCode: string;
+    townOrCity: string;
+    isDefaultBillingAddress: boolean;
+    vatRegionId: string;
+    vatNumber: string;
+    isDefaultShippingAddress: boolean;
+    shippingRegionId: string;
+    phoneNumber: string;
 }
 
 interface SellableItem {

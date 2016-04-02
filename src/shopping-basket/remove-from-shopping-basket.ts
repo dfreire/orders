@@ -1,4 +1,4 @@
-import { Action, State } from "./types";
+import { Action, State } from "../types";
 
 export const REMOVE_FROM_SHOPPING_BASKET = "REMOVE_FROM_SHOPPING_BASKET";
 
@@ -14,6 +14,6 @@ export function removeFromCurrentOrder(sellableItemId: string): RemoveFromShoppi
 }
 
 export function onRemoveFromShoppingBasket(state: State, action: RemoveFromShoppingBasketAction): State {
-    // TODO
-    return null;
+    const shoppingBasketItems = _.filter(state.shoppingBasketItems, (item) => item.sellableItemId === action.sellableItemId);
+    return _.assign({}, state, { shoppingBasketItems: shoppingBasketItems }) as State;
 }

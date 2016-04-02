@@ -6,14 +6,14 @@ import {SET_ORDER_BILLING_ADDRESS, SetOrderBillingAddressAction, onSetOrderBilli
 import {SET_ORDER_SHIPPING_ADDRESS, SetOrderShippingAddressAction, onSetOrderShippingAddress} from "./set-order-shipping-address";
 
 const newState: State = {
-    user: {
+    session: {
         id: undefined
     },
     sellableItems: [],
     sellableItemPrices: [],
     shoppingBasketItems: [],
-    currentOrder: undefined,
-    currentOrderItems: []
+    // currentOrder: undefined,
+    // currentOrderItems: []
 };
 
 export function app(state: State = newState, action: Action): State {
