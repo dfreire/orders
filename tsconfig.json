@@ -29,11 +29,11 @@
         "src/user/address/create-address.ts",
         "src/user/address/remove-address.ts",
         "src/user/address/update-address.ts",
+        "src/user/auth/change-email.ts",
+        "src/user/auth/change-password.ts",
         "src/user/auth/reset-password.ts",
         "src/user/auth/sign-in.ts",
         "src/user/auth/sign-out.ts",
-        "src/user/profile/change-email.ts",
-        "src/user/profile/change-password.ts",
         "test/index_test.ts",
         "test/test-data.ts"
     ],
